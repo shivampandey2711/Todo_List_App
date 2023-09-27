@@ -1,21 +1,47 @@
-// TodoList.js
-import React, { useState } from 'react';
+// TodoList.js (Updated)
+
+import React, { useState, useEffect } from 'react';
 import Task from './Task';
 
 function TodoList({ currentUser }) {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
 
+  // Load tasks from local storage when the component mounts
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem(currentUser)) || [];
+    setTasks(savedTasks);
+  }, [currentUser]);
+
+  // Function to save tasks to local storage
+  const saveTasksToLocalStorage = (updatedTasks) => {
+    localStorage.setItem(currentUser, JSON.stringify(updatedTasks));
+  };
+
   const addTask = () => {
-    // Implement task creation and storage logic here
+    if (newTask.trim() === '') return;
+
+    const updatedTasks = [
+      ...tasks,
+      { id: Date.now(), title: newTask, completed: false },
+    ];
+    setTasks(updatedTasks);
+    saveTasksToLocalStorage(updatedTasks);
+    setNewTask('');
   };
 
   const deleteTask = (taskId) => {
-    // Implement task deletion logic here
+    const updatedTasks = tasks.filter((task) => task.id !== taskId);
+    setTasks(updatedTasks);
+    saveTasksToLocalStorage(updatedTasks);
   };
 
   const completeTask = (taskId) => {
-    // Implement task completion logic here
+    const updatedTasks = tasks.map((task) =>
+      task.id === taskId ? { ...task, completed: !task.completed } : task
+    );
+    setTasks(updatedTasks);
+    saveTasksToLocalStorage(updatedTasks);
   };
 
   return (
@@ -45,4 +71,3 @@ function TodoList({ currentUser }) {
 }
 
 export default TodoList;
-
