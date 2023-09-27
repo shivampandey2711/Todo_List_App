@@ -1,4 +1,4 @@
-// Task.js
+// Task.js (Updated)
 import React from 'react';
 
 function Task({ task, onDelete, onComplete }) {
@@ -9,6 +9,8 @@ function Task({ task, onDelete, onComplete }) {
       >
         {task.title}
       </span>
+      <span>Due: {task.dueDate}</span>
+      <span>Priority: {task.priority}</span> {/* Display the priority */}
       <button onClick={() => onComplete(task.id)}>
         {task.completed ? 'Undo' : 'Complete'}
       </button>
@@ -18,4 +20,3 @@ function Task({ task, onDelete, onComplete }) {
 }
 
 export default Task;
-
